@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { MdAdd, MdEdit, MdDelete, MdAssignment, MdExpandMore, MdExpandLess, MdDownload, MdGrade, MdAttachFile, MdClose } from 'react-icons/md';
 
-const API_BASE = 'http://localhost:5000';
+import { API_BASE } from '../../config';
 
 const TeacherAssignments = () => {
     const { api } = useContext(AuthContext);

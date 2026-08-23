@@ -450,7 +450,8 @@ const StudentTaxonomy = () => {
         setLoadingExplanation(true);
         setRevealedHints({});
         try {
-            const res = await fetch('/api/student/taxonomy/explain-slide', {
+            const { API_BASE } = await import('../../config.js');
+            const res = await fetch(`${API_BASE}/api/student/taxonomy/explain-slide`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${user?.token}` },
                 body: JSON.stringify({ slide, level: level?.id || 'remember' })

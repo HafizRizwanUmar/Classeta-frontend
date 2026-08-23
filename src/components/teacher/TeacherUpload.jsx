@@ -28,10 +28,12 @@ const BLOOM_LEVELS = [
 const getLevel = (id) => BLOOM_LEVELS.find(l => l.id === id);
 
 /* ─── PDF Upload (Backend) ────────────────────────────────────────── */
+import { API_BASE } from '../../config';
+
 const uploadPdf = async (file, token) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('/api/teacher/taxonomy/upload-pdf', {
+    const res = await fetch(`${API_BASE}/api/teacher/taxonomy/upload-pdf`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -362,7 +364,7 @@ const TeacherUpload = () => {
         }, 1800);
 
         try {
-            const res = await fetch('/api/teacher/taxonomy/analyze-text', {
+            const res = await fetch(`${API_BASE}/api/teacher/taxonomy/analyze-text`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${user?.token}`,
