@@ -11,10 +11,7 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import { AuthContext } from '../../context/AuthContext';
 import { getFileUrl, API_BASE } from '../../config';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 /* ─── Bloom's Taxonomy Config ────────────────────────────────────── */
 const BLOOM_LEVELS = [
@@ -1003,9 +1000,13 @@ const StudentTaxonomy = () => {
                                         boxShadow: level ? `0 6px 28px ${level.color}12` : 'none',
                                         marginBottom: 18, display: 'flex', justifyContent: 'center', background: '#fff'
                                     }}>
-                                        <Document file={getFileUrl(pdfUrl)} loading={<div style={{ padding: 40, display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-muted)' }}><div className="spinner" style={{ width: 22, height: 22, borderWidth: 2 }} /> Loading slide...</div>}>
-                                            <Page pageNumber={current + 1} renderTextLayer={false} renderAnnotationLayer={false} width={Math.min(520, window.innerWidth - 300)} />
-                                        </Document>
+                                        <iframe 
+                                            src={`${getFileUrl(pdfUrl)}#page=${current + 1}&view=FitH`} 
+                                            width="100%" 
+                                            height={Math.min(520, window.innerWidth - 300) * 0.75} 
+                                            style={{ border: 'none', display: 'block' }} 
+                                            title="PDF Slide" 
+                                        />
                                     </div>
                                 ) : (
                                     <>

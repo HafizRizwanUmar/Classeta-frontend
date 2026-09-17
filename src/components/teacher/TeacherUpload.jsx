@@ -3,10 +3,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 import {
     MdCloudUpload, MdAutoAwesome, MdShare, MdCheckCircle,
@@ -595,9 +592,13 @@ const TeacherUpload = () => {
                                 transition: 'all 0.3s ease',
                                 alignItems: 'center', justifyContent: 'center'
                             }}>
-                                <Document file={getFileUrl(pdfUrl)} loading={<div className="spinner" style={{ width: 30, height: 30, borderWidth: 3 }} />}>
-                                    <Page pageNumber={selected + 1} renderTextLayer={false} renderAnnotationLayer={false} width={500} />
-                                </Document>
+                                <iframe 
+                                    src={`${getFileUrl(pdfUrl)}#page=${selected + 1}&view=FitH`} 
+                                    width="100%" 
+                                    height="100%" 
+                                    style={{ border: 'none', display: 'block', minHeight: 400 }} 
+                                    title="PDF Slide" 
+                                />
 
                                 {/* Taxonomy badge */}
                                 {currLevel && (
