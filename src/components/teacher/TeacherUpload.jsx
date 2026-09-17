@@ -28,7 +28,7 @@ const BLOOM_LEVELS = [
 const getLevel = (id) => BLOOM_LEVELS.find(l => l.id === id);
 
 /* ─── PDF Upload (Backend) ────────────────────────────────────────── */
-import { API_BASE } from '../../config';
+import { API_BASE, getFileUrl } from '../../config';
 
 const uploadPdf = async (file, token) => {
     const formData = new FormData();
@@ -586,7 +586,7 @@ const TeacherUpload = () => {
                                 transition: 'all 0.3s ease',
                                 alignItems: 'center', justifyContent: 'center'
                             }}>
-                                <Document file={pdfUrl} loading={<div className="spinner" style={{ width: 30, height: 30, borderWidth: 3 }} />}>
+                                <Document file={getFileUrl(pdfUrl)} loading={<div className="spinner" style={{ width: 30, height: 30, borderWidth: 3 }} />}>
                                     <Page pageNumber={selected + 1} renderTextLayer={false} renderAnnotationLayer={false} width={500} />
                                 </Document>
 

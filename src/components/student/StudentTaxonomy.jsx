@@ -9,6 +9,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { AuthContext } from '../../context/AuthContext';
+import { getFileUrl } from '../../config';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -1003,7 +1004,7 @@ const StudentTaxonomy = () => {
                                         boxShadow: level ? `0 6px 28px ${level.color}12` : 'none',
                                         marginBottom: 18, display: 'flex', justifyContent: 'center', background: '#fff'
                                     }}>
-                                        <Document file={pdfUrl} loading={<div style={{ padding: 40, display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-muted)' }}><div className="spinner" style={{ width: 22, height: 22, borderWidth: 2 }} /> Loading slide...</div>}>
+                                        <Document file={getFileUrl(pdfUrl)} loading={<div style={{ padding: 40, display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-muted)' }}><div className="spinner" style={{ width: 22, height: 22, borderWidth: 2 }} /> Loading slide...</div>}>
                                             <Page pageNumber={current + 1} renderTextLayer={false} renderAnnotationLayer={false} width={Math.min(520, window.innerWidth - 300)} />
                                         </Document>
                                     </div>
