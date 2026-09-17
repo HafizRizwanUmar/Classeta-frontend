@@ -9,7 +9,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 import { AuthContext } from '../../context/AuthContext';
-import { getFileUrl } from '../../config';
+import { getFileUrl, API_BASE } from '../../config';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -377,34 +377,33 @@ const StudentTaxonomy = () => {
     const [activePresIndex, setActivePresIndex] = useState(0);
     const containerRef                          = useRef(null);
 
-    /* ── Load presentations from localStorage ── */
+    /* ── Load presentations from MongoDB via Backend ── */
     useEffect(() => {
-        let loaded = [];
-        const raw = localStorage.getItem('classeta_taxonomy_presentations');
-        if (raw) {
+        const fetchPresentations = async () => {
             try {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed) && parsed.length > 0) loaded = parsed;
-            } catch (_) {}
-        }
-
-        if (loaded.length === 0) {
-            const legacySlides = localStorage.getItem('classeta_taxonomy_slides');
-            const legacyUrl    = localStorage.getItem('classeta_taxonomy_pdfUrl');
-            const legacyDate   = localStorage.getItem('classeta_taxonomy_shared_at');
-            if (legacySlides) {
-                try {
-                    const parsed = JSON.parse(legacySlides);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        loaded = [{ id: 'legacy', filename: 'Shared Presentation', slides: parsed, pdfUrl: legacyUrl, sharedAt: legacyDate }];
+                const res = await fetch(`${API_BASE}/api/taxonomy/shared`, {
+                    headers: { 'Authorization': `Bearer ${user?.token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.length > 0) {
+                        setPresentations(data);
+                        setNoData(false);
+                    } else {
+                        setNoData(true);
                     }
-                } catch(_) {}
+                } else {
+                    setNoData(true);
+                }
+            } catch (err) {
+                console.error("Failed to load presentations", err);
+                setNoData(true);
             }
+        };
+        if (user?.token) {
+            fetchPresentations();
         }
-
-        if (loaded.length > 0) setPresentations(loaded);
-        else setNoData(true);
-    }, []);
+    }, [user?.token]);
 
     const activePres = presentations[activePresIndex];
     const slides     = activePres?.slides || [];

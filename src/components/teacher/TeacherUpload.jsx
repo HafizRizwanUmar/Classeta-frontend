@@ -437,6 +437,15 @@ const TeacherUpload = () => {
         };
         
         // update teacher
+        try {
+            await fetch(`${API_BASE}/api/taxonomy/share`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${user?.token}` },
+                body: JSON.stringify(sharedPres)
+            });
+        } catch (e) {
+            console.error(e);
+        }
         setPresentations(prev => {
             const updated = prev.map(p => p.id === pres.id ? sharedPres : p);
             localStorage.setItem('classeta_teacher_presentations', JSON.stringify(updated));
